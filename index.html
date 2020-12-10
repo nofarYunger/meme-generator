@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>😎meme generator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body onload="onInit()">
+    <header>
+        <div class="main-layout nav">
+
+            <div class="logo"><img class="img-logo-header" src="logo/layer-2.png"></div>
+
+            <ul class="link-list">
+                <li><a onclick="showGallery()" href="#">Gallery</a></li>
+                <li class="seperator"></li>
+                <li><a href="#">About</a></li>
+            </ul>
+            <a class="menu-link" href="#" onclick="onOpenMenu()"><img class="humburger-btn" src="ICONS/white-hamburger-menu.jpg"></a>
+        </div>
+    </header>
+    <main class="main-layout">
+        <section class="canvas-editor-modal" hidden>
+            <div class="canvas-container">
+                <canvas id="my-canvas" height="500" width="500"></canvas>
+            </div>
+            <div class="control-box">
+                <input class="text-input" type="text" name="text" placeholder="put text here"
+                    oninput="onChangeFeature(this.value , 'txt' )">
+                <div></div>
+                <button class="btn btn-add" onclick="onAddNewLine()"><img class="icon" src="ICONS/add.png"></button>
+                <button class="btn btn-trash" onclick="ondeleteLine()"><img class="icon" src="ICONS/trash.png"></button>
+                <button class="btn btn-up-down" onclick="onMoveToNextLine()"><img class="icon"
+                        src="ICONS/up-and-down.png"></button>
+                <div></div>
+                <button class="btn btn-align" onclick="onChangeFeature('left','align')"><img class="icon"
+                        src="ICONS/align-to-left.png"></button>
+                <button class="btn btn-align" onclick="onChangeFeature('center','align')"><img class="icon"
+                        src="ICONS/center-text-alignment.png"></button>
+                <button class="btn btn-align" onclick="onChangeFeature('right','align')"><img class="icon"
+                        src="ICONS/align-to-right.png"></button>
+                <button class="btn btn-fontSize" onclick="onChangeFeature(+10,'fontSize')"><img class="icon"
+                        src="ICONS/increase-font-icon.png"></button>
+                <button class="btn btn-fontSize" onclick="onChangeFeature(-10,'fontSize')"><img class="icon"
+                        src="ICONS/decrease-font-icon.png"></button>
+
+                <select class="select-input" oninput="onChangeFeature(this.value , 'font' )" name="curser" id="curser">
+                    <option value="Impact">Impact</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Geneva">Geneva</option>
+                    <option value="Cursive">Cursive</option>
+                </select>
+                <button class="btn"><label for="outline-color"><img class="icon" src="ICONS/text-stroke.png"
+                            alt=""></label></button>
+                <button class="btn"><label for="fill-color"><img class="icon" src="ICONS/paint-board-and-brush.png"
+                            alt=""></label></button>
+                <input oninput="onChangeFeature(this.value , 'outline' )" type="color" class="color-input"
+                    name="outline-color" id="outline-color">
+                <input oninput="onChangeFeature(this.value , 'color' )" type="color" class="color-input"
+                    name="fill-color" value="#ffffff" id="fill-color">
+
+
+            </div>
+        </section>
+        <section class="gallery">
+
+            <div class="img-container">
+            </div>
+        </section>
+
+    </main>
+    
+    <footer>
+        <div class="footer-cont">
+
+            <div class="logo"><img class="img-logo-header" src="logo/layer-2.png"></div>
+            <p class="copyrights"> &copy copyrights to nofar and stackoverflow 2020</p>
+        </div>
+    </footer>
+
+
+    <script src="js/service.js"></script>
+    <script src="js/controler.js"></script>
+</body>
+
+</html>
