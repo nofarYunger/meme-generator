@@ -91,8 +91,12 @@ function updateLineIdx() {
 function deleteLineFromData() {
     var currLine = gMeme.selectedLineIdx
     gMeme.lines.splice(currLine, 1)
-    gMeme.selectedLineIdx= gMeme.lines.length-1
+    gMeme.selectedLineIdx = gMeme.lines.length - 1
 }
+function deleteLinesFromData() {
+    gMeme.lines =[]
+}
+
 
 function getImgsFromData() {
     return gImgs
@@ -107,6 +111,6 @@ function getSelectedLineFromData() {
     return gMeme.selectedLineIdx
 }
 function getSelectedTxtFromData() {
-    return gMeme.lines[selectedLineIdx].txt
+    return gMeme.lines[gMeme.selectedLineIdx].txt
 }
 

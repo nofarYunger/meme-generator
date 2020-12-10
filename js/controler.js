@@ -2,9 +2,9 @@
 
 var gCanvas;
 var gCtx;
+var gIsItAPrint = false;
 
-
-//INITING...
+//INITING THE PAGE---------------------------
 
 function onInit() {
     renderGallery()
@@ -25,7 +25,7 @@ function showGallery() {
     document.querySelector('.gallery').style.display = 'block'
     document.querySelector('.canvas-editor-modal').style.display = 'none'
     document.querySelector('.control-box').style.display = 'none'
-    clearCanvas()
+    onClearCanvas()
 }
 
 function onOpenMemeEditor(id) {
@@ -34,23 +34,23 @@ function onOpenMemeEditor(id) {
     document.querySelector('.control-box').style.display = 'grid'
 
     updateCurrImgIdToData(id)
-    renderCanvas()
+    _renderCanvas()
     createNewLine()
 }
 
 // CANVAS FUNCTIONS -------------------------
 
-function renderCanvas() {
-    let imgId = getImgIdFromData()
+function _renderCanvas() {
+    let imgId = getImgIdFromData();
     let img = new Image();
     img.src = `imgs-(square)/${imgId}.jpg`;
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height) //img,x,y,xend,yend
-        renderText()
+        _renderText();
     }
 }
 
-function renderText() {
+function _renderText() {
     let lines = getTxtFeatuersFromData()
     lines.forEach((line, idx) => {
         gCtx.lineWidth = `1.5`
@@ -62,31 +62,33 @@ function renderText() {
         gCtx.fillText(line.txt, pos.x, pos.y)
         gCtx.strokeText(line.txt, pos.x, pos.y)
 
-        if (idx === getSelectedLineFromData()) {
-            renderFocusedLine(line)
+        if (gIsItAPrint) return
+        if (!gIsItAPrint && idx === getSelectedLineFromData()) {
+            _renderFocusedLine(line)
+            console.log('painted the outline');
         }
     })
 }
 
-function renderFocusedLine(line) {
+function _renderFocusedLine(line) {
     const height = line.fontSize
     const pos = line.pos
-    const startX = getStartX(line)
+    const startX = _getStartX(line)
     const startY = pos.y - height
     gCtx.beginPath()
     gCtx.strokeStyle = 'black'
-    gCtx.rect(startX, startY, pos.width, height) // x,y,widht,height
+    gCtx.rect(startX, startY, pos.width, height + 10) // x,y,widht,height
     gCtx.stroke()
 }
 
-function measureTxtOnCanvas() {
+function _measureTxtOnCanvas() {
     const txt = getSelectedTxtFromData()
     const width = gCtx.measureText(txt).width
 
     updateWidthToData(width)
 }
 
-function getStartX(line) {
+function _getStartX(line) {
     const align = line.align;
     switch (align) {
         case 'left':
@@ -102,32 +104,53 @@ function getStartX(line) {
 // CONTROL BTNS FUNC----------------------------------
 
 function onMoveToNextLine() {
-    updateLineIdx()
-    renderCanvas()
+    updateLineIdx();
+    _renderCanvas();
+    _updateInputTxt()
 }
 
 function ondeleteLine() {
-    deleteLineFromData()
-    renderCanvas()
+    deleteLineFromData();
+    _renderCanvas();
 }
 
 function onAddNewLine() {
     document.querySelector('input[name=text]').value = ''
-    createNewLine()
-    renderCanvas()
+    createNewLine();
+    _renderCanvas();
 }
 
 function onChangeFeature(value, feature) {
-    if (feature === 'fontSize') updatefontSize(value)
-    else updateMemeFeatures(value, feature)
-    measureTxtOnCanvas()
-    renderCanvas()
-}
-
-function clearCanvas() {
-    gCtx.clearRect(0, 0, 500, 500);
+    if (feature === 'fontSize') updatefontSize(value);
+    else updateMemeFeatures(value, feature);
+    _measureTxtOnCanvas();
+    _renderCanvas();
 }
 
 function onOpenMenu() {
 
+}
+
+function onClearCanvas() {
+    deleteLinesFromData();
+    updateLineIdx();
+    onAddNewLine();
+}
+
+function onDownloadCanvas(elLink) {
+    gIsItAPrint = true;
+    _renderCanvas();
+    const data = gCanvas.toDataURL();
+    elLink.href = data;
+    elLink.download = 'my-img.jpg';
+    _toggleIsPrint()
+}
+
+function _toggleIsPrint() {
+    gIsItAPrint = !gIsItAPrint;
+}
+
+function _updateInputTxt() {
+    let txt = getSelectedTxtFromData()
+    document.querySelector('input[name=text]').value = txt
 }
