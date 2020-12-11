@@ -12,7 +12,7 @@
     <div class="main-screen" onclick="onToggleMenu()"></div>
 
     <header>
-        <div class="main-layout header">
+        <div class="main-layout header-box flex-row-center">
 
             <div class="logo"><img class="img-logo-header" src="logo/layer-2.png"></div>
 
@@ -24,11 +24,21 @@
             <a class="menu-link" href="#" onclick="onToggleMenu()"><img class="humburger-btn"
                     src="ICONS/white-hamburger-menu.jpg"></a>
         </div>
+        <div class="search-bar flex-row-center">
+            <div class=" main-layout">
+                <input type="text" name="search-keys" oninput="onSearchForKeys(this.value)"
+                    placeholder="Enter Search Keyword "> <img src="ICONS/search-icon.png" class="icon">
+            </div>
+
+        </div>
     </header>
     <main class="main-layout">
         <section class="canvas-editor-modal" hidden>
             <div class="canvas-container">
-                <canvas id="my-canvas" height="500" width="500"></canvas>
+                <canvas id="my-canvas" height="500" width="500" onmousemove="dragLine(event)"
+                    onmousedown="onMouseDown(event)" onmouseup="onMouseUp()" onmouseout="onMouseUp()"
+                    onclick="canvasClicked(event)" ontouchstart="onMouseDown(event)" ontouchmove="dragLine(event)"
+                    ontouchend="onMouseUp()"></canvas>
             </div>
             <div class="control-box">
                 <input class="text-input" type="text" name="text" placeholder="put text here"
@@ -101,6 +111,7 @@
     <script src="js/upload-service.js"></script>
     <script src="js/upload-controler.js"></script>
     <script src="js/service.js"></script>
+    <script src="js/control-drag-n-drop.js"></script>
     <script src="js/controler.js"></script>
 </body>
 

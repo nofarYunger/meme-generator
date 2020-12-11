@@ -7,13 +7,14 @@ var gIsItAPrint = false;
 //INITING THE PAGE---------------------------
 
 function onInit() {
-    renderGallery()
     gCanvas = document.getElementById('my-canvas')
     gCtx = gCanvas.getContext('2d')
+    var imgs = getImgsFromData()
+    renderGallery(imgs)
 }
 
-function renderGallery() {
-    var imgs = getImgsFromData()
+function renderGallery(imgs) {
+
     var innerHTMLs = imgs.map(img => {
         return `<a href="#"><img class="gallery-img" onclick="onOpenMemeEditor(this.id) "
          id="${img.id}" src="imgs-(square)/${img.id}.jpg" ></a>`
@@ -25,12 +26,16 @@ function showGallery() {
     document.querySelector('.gallery').style.display = 'block'
     document.querySelector('.canvas-editor-modal').style.display = 'none'
     document.querySelector('.control-box').style.display = 'none'
+    document.querySelector('.search-bar').style.display = 'flex'
     onClearCanvas()
     onToggleMenu()
+    var imgs = getImgsFromData()
+    renderGallery(imgs)
 }
 
 function onOpenMemeEditor(id) {
     document.querySelector('.gallery').style.display = 'none'
+    document.querySelector('.search-bar').style.display = 'none'
     document.querySelector('.canvas-editor-modal').style.display = 'flex'
     document.querySelector('.control-box').style.display = 'grid'
 
@@ -42,7 +47,7 @@ function onOpenMemeEditor(id) {
 // CANVAS FUNCTIONS -------------------------
 
 function renderCanvas() {
-    console.log('rendered the canvas');
+    // console.log('rendered the canvas');
     let imgId = getImgIdFromData();
     let img = new Image();
     img.src = `imgs-(square)/${imgId}.jpg`;
@@ -70,7 +75,7 @@ function _renderText() {
 }
 
 function highLightSelectedLine() {
-    console.log(gIsItAPrint);
+    // console.log(gIsItAPrint);
     if (gIsItAPrint) return
     var line = getSelectedlineFromData()
     _renderFocusedOutline(line)
@@ -171,7 +176,15 @@ function updateInputTxt() {
     document.querySelector('input[name=text]').value = txt
 }
 
-
-
-
+function onSearchForKeys(key) {
+    const imgs = getImgsFromData()
+    var filteredGallery = imgs.filter(img => {
+        let keywords = img.keywords
+        return keywords.some(keyword => {
+            return keyword.includes(key)
+        })
+    })
+    console.log(filteredGallery)
+    renderGallery(filteredGallery)
+}
 

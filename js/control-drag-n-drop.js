@@ -27,6 +27,7 @@ function onMouseDown(ev) {
 
 function dragLine(ev) {
     if (!gIsMouseDown) return
+    console.log(ev);
     ev.preventDefault()
     var { movementX, movementY } = ev;
     updateLineCords(movementX, movementY)
