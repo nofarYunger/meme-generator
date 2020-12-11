@@ -26,6 +26,7 @@ function showGallery() {
     document.querySelector('.canvas-editor-modal').style.display = 'none'
     document.querySelector('.control-box').style.display = 'none'
     onClearCanvas()
+    onToggleMenu()
 }
 
 function onOpenMemeEditor(id) {
@@ -34,19 +35,22 @@ function onOpenMemeEditor(id) {
     document.querySelector('.control-box').style.display = 'grid'
 
     updateCurrImgIdToData(id)
-    _renderCanvas()
+    renderCanvas()
     createNewLine()
 }
 
 // CANVAS FUNCTIONS -------------------------
 
-function _renderCanvas() {
+function renderCanvas() {
+    console.log('rendered the canvas');
     let imgId = getImgIdFromData();
     let img = new Image();
     img.src = `imgs-(square)/${imgId}.jpg`;
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height) //img,x,y,xend,yend
         _renderText();
+        _setTxtInputOnFocus()
+        highLightSelectedLine()
     }
 }
 
@@ -62,21 +66,23 @@ function _renderText() {
         gCtx.fillText(line.txt, pos.x, pos.y)
         gCtx.strokeText(line.txt, pos.x, pos.y)
 
-        if (gIsItAPrint) return
-        if (!gIsItAPrint && idx === getSelectedLineFromData()) {
-            _renderFocusedLine(line)
-            console.log('painted the outline');
-        }
     })
 }
 
-function _renderFocusedLine(line) {
+function highLightSelectedLine() {
+    console.log(gIsItAPrint);
+    if (gIsItAPrint) return
+    var line = getSelectedlineFromData()
+    _renderFocusedOutline(line)
+}
+
+function _renderFocusedOutline(line) {
     const height = line.fontSize
     const pos = line.pos
-    const startX = _getStartX(line)
+    const startX = getStartX(line)
     const startY = pos.y - height
     gCtx.beginPath()
-    gCtx.strokeStyle = 'black'
+    gCtx.strokeStyle = 'white'
     gCtx.rect(startX, startY, pos.width, height + 10) // x,y,widht,height
     gCtx.stroke()
 }
@@ -84,11 +90,11 @@ function _renderFocusedLine(line) {
 function _measureTxtOnCanvas() {
     const txt = getSelectedTxtFromData()
     const width = gCtx.measureText(txt).width
-
+    // console.log(width);
     updateWidthToData(width)
 }
 
-function _getStartX(line) {
+function getStartX(line) {
     const align = line.align;
     switch (align) {
         case 'left':
@@ -105,30 +111,32 @@ function _getStartX(line) {
 
 function onMoveToNextLine() {
     updateLineIdx();
-    _renderCanvas();
-    _updateInputTxt()
+    renderCanvas();
+    updateInputTxt()
 }
 
 function ondeleteLine() {
     deleteLineFromData();
-    _renderCanvas();
+    renderCanvas();
+    updateInputTxt()
 }
 
 function onAddNewLine() {
     document.querySelector('input[name=text]').value = ''
     createNewLine();
-    _renderCanvas();
+    renderCanvas();
 }
+
 
 function onChangeFeature(value, feature) {
     if (feature === 'fontSize') updatefontSize(value);
     else updateMemeFeatures(value, feature);
     _measureTxtOnCanvas();
-    _renderCanvas();
+    renderCanvas();
 }
 
-function onOpenMenu() {
-
+function onToggleMenu() {
+    document.body.classList.toggle('open-menu');
 }
 
 function onClearCanvas() {
@@ -138,19 +146,32 @@ function onClearCanvas() {
 }
 
 function onDownloadCanvas(elLink) {
-    gIsItAPrint = true;
-    _renderCanvas();
-    const data = gCanvas.toDataURL();
-    elLink.href = data;
-    elLink.download = 'my-img.jpg';
     _toggleIsPrint()
+    if (gIsItAPrint) {
+
+        console.log(gIsItAPrint);
+        renderCanvas();
+        const data = gCanvas.toDataURL();
+        elLink.href = data;
+        elLink.download = 'my-img.jpg';
+        gIsItAPrint = false;
+    }
 }
 
 function _toggleIsPrint() {
     gIsItAPrint = !gIsItAPrint;
 }
 
-function _updateInputTxt() {
+function _setTxtInputOnFocus() {
+    document.querySelector('input[name=text]').focus()
+}
+
+function updateInputTxt() {
     let txt = getSelectedTxtFromData()
     document.querySelector('input[name=text]').value = txt
 }
+
+
+
+
+

@@ -42,10 +42,11 @@ function _createImg(...keys) {
 }
 
 function createNewLine() {
+    let posCords = getNewLinePosOnCanvas()
     let newLine = {
         txt: '',
         fontSize: 40,
-        pos: { x: 250, y: 150, width: 0 },
+        pos: { x: posCords.x, y: posCords.y, width: 0 },
         align: 'center',
         color: 'white',
         outline: 'black',
@@ -53,24 +54,20 @@ function createNewLine() {
 
     }
     gMeme.lines.push(newLine)
-    _positionNewLineOnCanvas()
     gMeme.selectedLineIdx = gMeme.lines.length - 1
 }
 
-function _positionNewLineOnCanvas() {
-    const currLine = gMeme.selectedLineIdx
+
+function getNewLinePosOnCanvas() {
+    let currLine = gMeme.lines.length
     if (currLine === 0) {
-        gMeme.lines[0].pos.x = 250
-        gMeme.lines[0].pos.y = 50
+        return { x: 250, y: 50 }
     } else if (currLine === 1) {
-        gMeme.lines[1].pos.x = 250
-        gMeme.lines[1].pos.y = 450
+        return { x: 250, y: 450 }
     } else {
-        gMeme.lines[currLine].pos.x = 250
-        gMeme.lines[currLine].pos.y = 50 * currLine
+        return { x: 250, y: 50 * currLine }
     }
 }
-
 
 function updateCurrImgIdToData(newId) {
     gMeme.selectedImgId = newId
@@ -91,12 +88,16 @@ function updateLineIdx() {
 function deleteLineFromData() {
     var currLine = gMeme.selectedLineIdx
     gMeme.lines.splice(currLine, 1)
-    gMeme.selectedLineIdx = gMeme.lines.length - 1
+    if (gMeme.lines.length === 0) createNewLine()
+    else gMeme.selectedLineIdx = gMeme.lines.length - 1
+
 }
 function deleteLinesFromData() {
-    gMeme.lines =[]
+    gMeme.lines = []
 }
-
+function updateSelectedLineFromClick(idx){
+    gMeme.selectedLineIdx=idx
+}
 
 function getImgsFromData() {
     return gImgs
@@ -107,10 +108,13 @@ function getTxtFeatuersFromData() {
 function getImgIdFromData() {
     return gMeme.selectedImgId
 }
-function getSelectedLineFromData() {
+function getSelectedLineIdxFromData() {
     return gMeme.selectedLineIdx
 }
 function getSelectedTxtFromData() {
     return gMeme.lines[gMeme.selectedLineIdx].txt
+}
+function getSelectedlineFromData() {
+    return gMeme.lines[gMeme.selectedLineIdx]
 }
 

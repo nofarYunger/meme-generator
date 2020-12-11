@@ -9,19 +9,19 @@
 </head>
 
 <body onload="onInit()">
+    <div class="main-screen" onclick="onToggleMenu()"></div>
+
     <header>
-        <div class="main-layout nav">
+        <div class="main-layout header">
 
             <div class="logo"><img class="img-logo-header" src="logo/layer-2.png"></div>
 
-            <ul class="link-list">
+            <ul class="main-nav">
                 <li><a onclick="showGallery()" href="#">Gallery</a></li>
-                <li class="seperator"></li>
                 <li><a href="#">About</a></li>
-                <li class="seperator"></li>
                 <li><a href="#">My memes</a></li>
             </ul>
-            <a class="menu-link" href="#" onclick="onOpenMenu()"><img class="humburger-btn"
+            <a class="menu-link" href="#" onclick="onToggleMenu()"><img class="humburger-btn"
                     src="ICONS/white-hamburger-menu.jpg"></a>
         </div>
     </header>
@@ -73,7 +73,7 @@
 
                 <form action="" method="POST" enctype="multipart/form-data" onsubmit="uploadImg(this, event)">
                     <input name="img" id="imgData" type="hidden" />
-                    <button class="btn-extra" type="submit"><span class="publish-span">Publish</span> 
+                    <button class="btn-extra" type="submit"><span class="publish-span">Publish</span>
 
                         <div class="share-container"></div>
                 </form></button>
