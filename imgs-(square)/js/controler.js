@@ -76,7 +76,6 @@ function renderCanvasFromData() {
     let imgId = getImgIdFromData();
     let img = new Image();
     img.src = `imgs-(square)/${imgId}.jpg`;
-    console.log('[p[p');
     // after the img loads prints the content on the canvas
     img.onload = () => {
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height) //img,x,y,xend,yend
@@ -100,7 +99,6 @@ function renderCanvasForDownload() {
 
 // getting the featurs from data and rendering the content on the canvass
 function _renderText() {
-    console.log('render!!!');
     let lines = getTxtFeatuersFromData()
     // for each line:
     lines.forEach((line) => {
@@ -249,7 +247,9 @@ function updateInputTxt() {
 function onSearchForKeys(key) {
     let imgs = getImgsFromData()
     var filteredGallery = imgs.filter(img => {
-        return img.keywords[0].some(keyword => {f
+        let keywords = img.keywords
+        return keywords.some(function (keyword) {
+            console.log(keyword);
             return keyword.includes(`${key.toLowerCase()}`)
         })
     })
