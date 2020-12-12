@@ -69,6 +69,8 @@ function getNewLinePosOnCanvas() {
     }
 }
 
+//updating the data from the controler------------------------ 
+
 function updateCurrImgIdToData(newId) {
     gMeme.selectedImgId = newId
 }
@@ -85,20 +87,22 @@ function updateLineIdx() {
     if (gMeme.selectedLineIdx >= gMeme.lines.length - 1) gMeme.selectedLineIdx = 0
     else gMeme.selectedLineIdx++
 }
+function updateSelectedLineFromClick(idx){
+    gMeme.selectedLineIdx=idx
+}
+
 function deleteLineFromData() {
     var currLine = gMeme.selectedLineIdx
     gMeme.lines.splice(currLine, 1)
     if (gMeme.lines.length === 0) createNewLine()
     else gMeme.selectedLineIdx = gMeme.lines.length - 1
-
 }
+
 function deleteLinesFromData() {
     gMeme.lines = []
 }
-function updateSelectedLineFromClick(idx){
-    gMeme.selectedLineIdx=idx
-}
 
+// geting data from the service to the controler----------------------
 
 function getImgsFromData() {
     return gImgs

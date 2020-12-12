@@ -88,7 +88,7 @@ main {
 
 .btn-extra {
     grid-row: span 1;
-    grid-column: span 2;
+    grid-column: span 1;
 }
 
 /* control box design------------------------------- */
@@ -107,7 +107,7 @@ main {
     background-color: #ff7f00;
     border: none;
     font-family: montserrat-regular, sans-serif;
-    width: 120px;
+    width: 85px;
     height: 3.75em;
     cursor: pointer;
 }
