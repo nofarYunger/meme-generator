@@ -12,7 +12,7 @@ function canvasClicked(ev) {
     })
     if (clickedLineIdx === undefined) return
     updateSelectedLineFromClick(clickedLineIdx)
-    renderCanvas()
+    activateRenderAccordingToImg()
     updateInputTxt()
 }
 
@@ -30,13 +30,13 @@ function dragLine(ev) {
     console.log(ev);
     ev.preventDefault()
     var { movementX, movementY } = ev;
-    updateLineCords(movementX, movementY)
-    renderCanvas()
+    _updateLineCords(movementX, movementY)
+    activateRenderAccordingToImg()
 }
 
 
-function updateLineCords(diffX, diffY) {
+function _updateLineCords(diffX, diffY) {
     var line = getSelectedlineFromData()
     line.pos.x += diffX
     line.pos.y += diffY
-}
+}   
