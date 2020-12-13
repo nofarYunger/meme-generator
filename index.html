@@ -19,7 +19,7 @@
                 <ul class="main-nav">
                     <li><a onclick="showGallery()" href="#">Gallery</a></li>
                     <li><a onclick="onToggleModal()" href="#">About</a></li>
-                    <li><a href="#">My memes</a></li>
+                    <!-- <li><a href="#">My memes</a></li> -->
                 </ul>
                 <a class="menu-link" href="#" onclick="onToggleMenu()"><img class="humburger-btn"
                         src="ICONS/white-hamburger-menu.jpg"></a>
@@ -45,15 +45,15 @@
                 <div class="canvas-container">
                     <canvas id="my-canvas" height="500" width="500" onmousemove="dragLine(event)"
                         onmousedown="onMouseDown(event)" onmouseup="onMouseUp()" onmouseout="onMouseUp()"
-                        onclick="canvasClicked(event)" ontouchstart="onMouseDown(event)" ontouchmove="dragLine(event)"
-                        ontouchend="onMouseUp()"></canvas>
+                        onclick="canvasClicked(event)" ontouchstart="canvasClicked(event)"
+                        ontouchmove="dragLineOnMobile(event)" ontouchend="onMouseUp()"></canvas>
                 </div>
                 <div class="control-box">
                     <input class="text-input" type="text" name="text" placeholder="put text here"
                         oninput="onChangeFeature(this.value , 'txt' )">
                     <div></div>
                     <button class="btn " onclick="onAddNewLine()"><img class="icon" src="ICONS/add.png"></button>
-                    <button class="btn " onclick="ondeleteLine()"><img class="icon" src="ICONS/trash.png"></button>
+                    <button class="btn " onclick="onDeleteLine()"><img class="icon" src="ICONS/trash.png"></button>
                     <button class="btn " onclick="onMoveToNextLine()"><img class="icon"
                             src="ICONS/up-and-down.png"></button>
                     <div></div>
@@ -95,10 +95,13 @@
                     <form action="" method="POST" enctype="multipart/form-data" onsubmit="uploadImg(this, event)">
                         <input name="img" id="imgData" type="hidden" />
                         <button class="btn-extra" type="submit"><span class="publish-span">Publish</span>
-
                             <div class="share-container"></div>
                     </form></button>
+                    <div class="flex-row-center">
+                        <div class="emoji-box"></div>
+                        <button onclick="onNextPage()">➡</button>
 
+                    </div>
                 </div>
 
             </section>

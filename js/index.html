@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>😎meme generator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body onload="onInit()">
+    <div class="main-screen" onclick="onToggleMenu()"></div>
+    <div class="main-screen-2" onclick="onToggleSavedModal()"></div>
+    <div class="wrapper wrapper-gallery">
+        <header>
+            <div class="main-layout header-box flex-row-center">
+
+                <div class="logo"><a onclick="onToggleModal()" href="#"><img class="img-logo-header"
+                            src="logo/layer-2.png"></a></div>
+
+                <ul class="main-nav">
+                    <li><a onclick="showGallery()" href="#">Gallery</a></li>
+                    <li><a onclick="onShowSavedImgs()" href="#">My memes</a></li>
+                    <li><a onclick="onToggleModal()" href="#">About</a></li>
+                </ul>
+                <a class="menu-link" href="#" onclick="onToggleMenu()"><img class="humburger-btn"
+                        src="ICONS/white-hamburger-menu.jpg"></a>
+            </div>
+            <div class="search-bar ">
+                <div class=" main-layout flex-row-center">
+                    <div> <input type="text" name="search-keys" oninput="onSearchForKeys(this.value)"
+                            placeholder="Enter Search Keyword "> <img src="ICONS/search-icon.png" class="icon"> </div>
+                    <ul class="keys-list flex-row-center">
+                        <li onclick="onSearchForKeys(this.innerText)">funny</li>
+                        <li onclick="onSearchForKeys(this.innerText)">cute</li>
+                        <li onclick="onSearchForKeys(this.innerText)">baby</li>
+                        <li onclick="onSearchForKeys(this.innerText)">puppy</li>
+                        <li onclick="onSearchForKeys(this.innerText)">politics</li>
+                    </ul>
+                    <input class="file-input " type="file" name="image" accept="image/*" onchange="onImgInput(event)" />
+                </div>
+
+            </div>
+        </header>
+        <main class="main-layout">
+
+            <section class="canvas-editor-modal" hidden>
+                <div class="canvas-container">
+                    <canvas id="my-canvas" height="500" width="500" onmousemove="dragLine(event)"
+                        onmousedown="onMouseDown(event)" onmouseup="onMouseUp()" onmouseout="onMouseUp()"
+                        onclick="canvasClicked(event)" ontouchstart="canvasClicked(event)"
+                        ontouchmove="dragLineOnMobile(event)" ontouchend="onMouseUp()"></canvas>
+                </div>
+                <div class="controler-conteiner">
+
+                    <div class="control-box">
+                        <input class="text-input" type="text" name="text" placeholder="put text here"
+                            oninput="onChangeFeature(this.value , 'txt' )">
+                        <div></div>
+                        <button class="btn " onclick="onAddNewLine()"><img class="icon" src="ICONS/add.png"></button>
+                        <button class="btn " onclick="onDeleteLine()"><img class="icon" src="ICONS/trash.png"></button>
+                        <button class="btn " onclick="onMoveToNextLine()"><img class="icon"
+                                src="ICONS/up-and-down.png"></button>
+                        <div></div>
+                        <button class="btn " onclick="onChangeFeature('left','align')"><img class="icon"
+                                src="ICONS/align-to-left.png"></button>
+                        <button class="btn " onclick="onChangeFeature('center','align')"><img class="icon"
+                                src="ICONS/center-text-alignment.png"></button>
+                        <button class="btn " onclick="onChangeFeature('right','align')"><img class="icon"
+                                src="ICONS/align-to-right.png"></button>
+                        <button class="btn " onclick="onChangeFeature(+10,'fontSize')"><img class="icon"
+                                src="ICONS/increase-font-icon.png"></button>
+                        <button class="btn " onclick="onChangeFeature(-10,'fontSize')"><img class="icon"
+                                src="ICONS/decrease-font-icon.png"></button>
+
+                        <select class="select-input" oninput="onChangeFeature(this.value , 'font' )" name="curser"
+                            id="curser">
+                            <option value="Impact">Impact</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Geneva">Geneva</option>
+                            <option value="Cursive">Cursive</option>
+                        </select>
+                        <button class="btn color-btn"><img class="icon icon-color-input" src="ICONS/text-stroke.png"
+                                alt=""><input oninput="onChangeFeature(this.value , 'outline' )" type="color"
+                                class="color-input" name="outline-color" id="outline-color"></button>
+                        <button class="btn color-btn"><img class="icon icon-color-input"
+                                src="ICONS/paint-board-and-brush.png" alt=""><input
+                                oninput="onChangeFeature(this.value , 'color' )" type="color" class="color-input"
+                                name="fill-color" value="#ffffff" id="fill-color"></button>
+
+
+
+                        <div class="flex-row-center">
+                            <div class="emoji-box"></div>
+                            <button class="btn" onclick="onNextPage()"><img class="icon" src="ICONS/arrow-right.png"
+                                    alt=""></button>
+
+                        </div>
+                    </div>
+                    <div class="btn-extra-cont flex-row-center">
+                        <button onclick="onClearCanvas()" class="btn-extra">Clear</button>
+                        <button onclick="onSaveCanvas()" class="btn-extra">Save</button>
+                        <div></div>
+                        <button class="btn-extra"> <a class="download-link" href="#" onclick="onDownloadCanvas(this)"
+                                download="">Download</a></button>
+                        <div></div>
+                        <form action="" method="POST" enctype="multipart/form-data" onsubmit="uploadImg(this, event)">
+                            <input name="img" id="imgData" type="hidden" />
+                            <button class="btn-extra" type="submit"><span class="publish-span">Publish</span>
+                                <div class="share-container"></div>
+                        </form></button>
+                    </div>
+                </div>
+            </section>
+            <section class="gallery">
+                <div class="img-container"></div>
+                <div class="modal modal-gallery">
+                    <h1>ERROR 404 </h1>
+                    <h2>sorry! content not found</h2>
+                    <p>try searching something else or bring an image of your own!
+                    </p>
+                    <button onclick="onCloseModal()">X</button>
+                </div>
+            </section>
+
+            <div class="modal modal-about">
+                <h1>A MESSAGE FROM ME</h1>
+                <h2>thank you for supporting my website!</h2>
+                <p>have fun! upload your own picturs make personalized memes and tell all your friends
+                </p>
+                <button onclick="onToggleModal()">X</button>
+            </div>
+
+
+            <div class="modal  modal-saved-imgs">
+                <h1>your saved projects</h1>
+                <h2>click to continue editing</h2>
+                <div class="saved-imgs"></div>
+                <button onclick="onToggleSavedModal()">X</button>
+            </div>
+
+        </main>
+
+        <footer>
+            <div class="footer-cont">
+
+                <div class="logo"><img class="img-logo-header" src="logo/layer-2.png"></div>
+                <p class="copyrights"> &copy copyrights to nofar yunger and google 2020</p>
+            </div>
+        </footer>
+
+    </div>
+    <script src="js/local-storage-service.js"></script>
+    <script src="lib/hammer.js"></script>
+    <script src="js/upload-controler.js"></script>
+    <script src="js/user-input-img-controler.js"></script>
+    <script src="js/service.js"></script>
+    <script src="js/controler.js"></script>
+    <script src="js/local-storage-controler.js"></script>
+    <script src="js/control-drag-n-drop.js"></script>
+</body>
+
+</html>

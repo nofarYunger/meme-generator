@@ -3,26 +3,31 @@
 var gCanvas;
 var gCtx;
 var gInputImgEv = null;
+var gEmojiPagenation = 0
 
 //INITING THE PAGE---------------------------
 
 function onInit() {
     gCanvas = document.getElementById('my-canvas')
     gCtx = gCanvas.getContext('2d')
+    if (window.width < 550) {
+        gCanvas.width = 300
+        gCanvas.height = 300
+    }
     var imgs = getImgsFromData()
     renderGallery(imgs)
+    _renderEmojiBox()
 }
 
 
 function renderGallery(imgs) {
-
-    // opening error modal
     if (imgs.length === 0) {
+        // opening error modal
         document.querySelector('.modal-gallery').style.display = 'block'
     } else document.querySelector('.modal-gallery').style.display = 'none'
     var innerHTMLs = imgs.map(img => {
         return `<a href="#"><img class="gallery-img" onclick="onOpenMemeEditor(this.id) "
-        id="${img.id}" src="imgs-(square)/${img.id}.jpg" ></a>`
+        id="${img.id}" src="imgs/${img.id}.jpg" ></a>`
     })
     document.querySelector('.img-container').innerHTML = innerHTMLs.join(' ')
 }
@@ -70,17 +75,17 @@ function activateRenderAccordingToImg() {
     else renderCanvasFromData()
 }
 
-
 function renderCanvasFromData() {
     //getting the img from data and rendering it on the canvas
     let imgId = getImgIdFromData();
     let img = new Image();
-    img.src = `imgs-(square)/${imgId}.jpg`;
-    console.log('[p[p');
+    img.src = `imgs/${imgId}.jpg`;
     // after the img loads prints the content on the canvas
     img.onload = () => {
+        gCanvas.width = img.width
+        gCanvas.height = img.height
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height) //img,x,y,xend,yend
-        _renderText();
+        _drawText();
         _setTxtInputOnFocus()
         _highLightSelectedLine()
     }
@@ -91,16 +96,17 @@ function renderCanvasFromData() {
 function renderCanvasForDownload() {
     let imgId = getImgIdFromData();
     let img = new Image();
-    img.src = `imgs-(square)/${imgId}.jpg`;
+    img.src = `imgs/${imgId}.jpg`;
+    gCanvas.width = img.width
+    gCanvas.height = img.height
     gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height) //img,x,y,xend,yend
-    _renderText();
+    _drawText();
     _setTxtInputOnFocus()
 }
 
 
 // getting the featurs from data and rendering the content on the canvass
-function _renderText() {
-    console.log('render!!!');
+function _drawText() {
     let lines = getTxtFeatuersFromData()
     // for each line:
     lines.forEach((line) => {
@@ -135,6 +141,9 @@ function _renderFocusedOutline(line) {
 // update the data after each change
 function _measureTxtOnCanvas() {
     const txt = getSelectedTxtFromData()
+    const fontType = getSelectedlineFromData().font
+    const fontSize = getSelectedlineFromData().fontSize
+    gCtx.font = `${fontSize}px ${fontType}`
     const width = gCtx.measureText(txt).width
     updateWidthToData(width)
 }
@@ -163,7 +172,7 @@ function onMoveToNextLine() {
     updateInputTxt()
 }
 
-function ondeleteLine() {
+function onDeleteLine() {
     deleteLineFromData();
     activateRenderAccordingToImg();
     updateInputTxt()
@@ -202,9 +211,41 @@ function onDownloadCanvas(elLink) {
     elLink.download = 'my-img.jpg';
 }
 
+// emojis:--------------------------------------------
 
+function onAddEmoji(emoji) {
+    createNewLine();
+    onChangeFeature(emoji, 'txt')
+    activateRenderAccordingToImg()
+}
 
+function _renderEmojiBox() {
+    var emojis = getEmojisFromData()
+    console.log(emojis);
+    var emojisForDisplay = getEmojisForDisplay(emojis)
+    var innerHTMLs = emojisForDisplay.map(emoji => {
+        return `<span onclick="onAddEmoji(this.innerText)">${emoji}</span> `
 
+    })
+    document.querySelector('.emoji-box').innerHTML = innerHTMLs.join(' ')
+}
+
+function getEmojisForDisplay(emojis) {
+    let startIdx = 0 + 5 * gEmojiPagenation
+    let endIdx = startIdx + 6
+    if (endIdx > emojis.length) {
+        gEmojiPagenation = 0
+        startIdx = 0 + 5 * gEmojiPagenation
+        endIdx = startIdx + 6
+    }
+    let displayEmojis = emojis.slice(startIdx, endIdx)
+    return displayEmojis
+}
+
+function onNextPage() {
+    gEmojiPagenation++
+    _renderEmojiBox()
+}
 
 // CHANGING CSS FROM JS : --------------------------------------------------------------
 
@@ -242,14 +283,28 @@ function updateInputTxt() {
     document.querySelector('input[name=text]').value = txt
 }
 
+// sets the new line first position
+function getNewLinePosOnCanvas() {
+    let lines = getTxtFeatuersFromData()
+    let currLineIdx = lines.length
+    let width = gCanvas.width
+    let height = gCanvas.height
 
+    if (currLineIdx === 0) {
+        return { x: width / 2, y: 50 }
+    } else if (currLineIdx === 1) {
+        return { x: width / 2, y: height - 50 }
+    } else {
+        return { x: width / 2, y: height / 2 }
+    }
+}
 
 // SEARCH BY KEY----------------------------------------
 
 function onSearchForKeys(key) {
     let imgs = getImgsFromData()
     var filteredGallery = imgs.filter(img => {
-        return img.keywords[0].some(keyword => {f
+        return img.keywords[0].some(keyword => {
             return keyword.includes(`${key.toLowerCase()}`)
         })
     })

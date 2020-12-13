@@ -1,17 +1,17 @@
 'use strict'
 var gIsMouseDown = false
-var gLastTouchCords = { x: gCanvas.offsetX, y: gCanvas.offsetY };
+var gLastTouchCords = { x: null, y: null };
 
 function canvasClicked(ev) {
     var { offsetX, offsetY } = ev;
     var lines = getTxtFeatuersFromData()
-    console.log(ev);
+    // console.log(ev);
     var clickedLineIdx = lines.findIndex((line) => {
         let lineX = getStartX(line)
         return offsetX >= lineX && offsetX <= lineX + line.pos.width
             && offsetY <= line.pos.y && offsetY >= line.pos.y - line.fontSize
     })
-    console.log(clickedLineIdx);
+    // console.log(clickedLineIdx);
     if (clickedLineIdx === -1) return
     
     if (ev.type === 'touchstart') {
@@ -24,7 +24,7 @@ function canvasClicked(ev) {
 }
 
 function onMouseUp() {
-    // gIsMouseDown = false;
+    gIsMouseDown = false;
     gLastTouchCords = { x: null, y: null };
 }
 
@@ -32,7 +32,7 @@ function onMouseUp() {
 
 function onMouseDown(ev) {
     gIsMouseDown = true
-    console.log(ev);
+    // console.log(ev);
     canvasClicked(ev)
 
 
@@ -68,7 +68,8 @@ function dragLineOnMobile(ev) {
         x: currPos.x - gLastTouchCords.x,
         y: currPos.y - gLastTouchCords.y
     }
-    _updateLineCords(diff.x, diff.y)
+    _updateLineCordsForTouch(x, y)
+    // _updateLineCords(diff.x, diff.y)
     gLastTouchCords = currPos
     activateRenderAccordingToImg()
 }
@@ -87,8 +88,31 @@ function dragLineOnMobile(ev) {
 // }
 
 
-// function _updateLineCordsForTouch(x, y) {
-//     var line = getSelectedlineFromData()
-//     line.pos.x = x
-//     line.pos.y = y
+function _updateLineCordsForTouch(x, y) {
+    var line = getSelectedlineFromData()
+    line.pos.x = x
+    line.pos.y = y
+}
+
+
+
+// function handleTouch(ev) {
+    
+//     ev.preventDefault()
+//     gCanvas = document.querySelector('.my-canvas')
+//     const gCan = new Hammer(gCanvas);
+//     gCan.on('pan', function (ev) {
+//         touchAndDrop((ev.center.x), (ev.center.y))
+//         activateRenderAccordingToImg()
+//     });
+// }
+
+// function touchAndDrop(x,y){
+//     console.log('xx',x)
+//     console.log('ofset',gCtx.canvas.offsetLeft)
+//     var X = x-gCtx.canvas.offsetLeft
+//     var Y = y-gCtx.canvas.offsetTop
+//     // console.log(x)
+//     // console.log(y)
+//     _updateLineCordsForTouch(X, Y)
 // }

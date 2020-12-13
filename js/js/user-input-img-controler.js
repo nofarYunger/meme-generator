@@ -25,8 +25,8 @@ function renderImgFromInput(img) {
     gCtx.drawImage(img, 0, 0);
 
     // rendering txt
-    _renderText();
-    _setTxtInputOnFocus()
+    drawText();
+    setTxtInputOnFocus()
     _highLightSelectedLine()
 }
 
@@ -46,8 +46,8 @@ function renderCanvasFromInputForDownload() {
         gCanvas.width = img.width
         gCanvas.height = img.height
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height) //img,x,y,xend,yend
-        _renderText();
-        _setTxtInputOnFocus()
+        drawText();
+        setTxtInputOnFocus()
     }
 }
 
