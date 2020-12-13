@@ -263,7 +263,7 @@ function onToggleModal() {
     document.body.classList.toggle('open-modal');
     document.body.classList.remove('open-menu');
 }
-function onToggleSavedModal() {
+function onShowSavedImgs() {
     document.body.classList.toggle('open-modal-save');
     document.body.classList.remove('open-menu');
 }
