@@ -4,6 +4,9 @@ var gCanvas;
 var gCtx;
 var gInputImgEv = null;
 var gEmojiPagenation = 0
+var gSavedMemeImgs = [];
+const SAVE_KEY = 'memesImgs';
+
 
 //INITING THE PAGE---------------------------
 
@@ -85,8 +88,8 @@ function renderCanvasFromData() {
         gCanvas.width = img.width
         gCanvas.height = img.height
         gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height) //img,x,y,xend,yend
-        _drawText();
-        _setTxtInputOnFocus()
+        drawText();
+        setTxtInputOnFocus()
         _highLightSelectedLine()
     }
 }
@@ -100,13 +103,13 @@ function renderCanvasForDownload() {
     gCanvas.width = img.width
     gCanvas.height = img.height
     gCtx.drawImage(img, 0, 0, gCanvas.width, gCanvas.height) //img,x,y,xend,yend
-    _drawText();
-    _setTxtInputOnFocus()
+    drawText();
+    setTxtInputOnFocus()
 }
 
 
 // getting the featurs from data and rendering the content on the canvass
-function _drawText() {
+function drawText() {
     let lines = getTxtFeatuersFromData()
     // for each line:
     lines.forEach((line) => {
@@ -211,6 +214,8 @@ function onDownloadCanvas(elLink) {
     elLink.download = 'my-img.jpg';
 }
 
+
+
 // emojis:--------------------------------------------
 
 function onAddEmoji(emoji) {
@@ -221,7 +226,6 @@ function onAddEmoji(emoji) {
 
 function _renderEmojiBox() {
     var emojis = getEmojisFromData()
-    console.log(emojis);
     var emojisForDisplay = getEmojisForDisplay(emojis)
     var innerHTMLs = emojisForDisplay.map(emoji => {
         return `<span onclick="onAddEmoji(this.innerText)">${emoji}</span> `
@@ -231,11 +235,11 @@ function _renderEmojiBox() {
 }
 
 function getEmojisForDisplay(emojis) {
-    let startIdx = 0 + 5 * gEmojiPagenation
+    let startIdx = 0 + 4 * gEmojiPagenation + 1
     let endIdx = startIdx + 6
     if (endIdx > emojis.length) {
         gEmojiPagenation = 0
-        startIdx = 0 + 5 * gEmojiPagenation
+        startIdx = 0 + 4 * gEmojiPagenation + 1
         endIdx = startIdx + 6
     }
     let displayEmojis = emojis.slice(startIdx, endIdx)
@@ -259,6 +263,10 @@ function onToggleModal() {
     document.body.classList.toggle('open-modal');
     document.body.classList.remove('open-menu');
 }
+function onToggleSavedModal() {
+    document.body.classList.toggle('open-modal-save');
+    document.body.classList.remove('open-menu');
+}
 
 function onCloseModal() {
     document.querySelector('.modal-gallery').style.display = 'none'
@@ -274,7 +282,7 @@ function wrapperDisplayGallery() {
 
 
 
-function _setTxtInputOnFocus() {
+function setTxtInputOnFocus() {
     document.querySelector('input[name=text]').focus()
 }
 
