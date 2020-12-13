@@ -14,7 +14,7 @@ function onSaveCanvas() {
 
 function onShowSavedImgs() {
     renderSavedMemes()
-    onToggleSavedModal()
+    onShowSavedImgs()
 }
 
 function renderSavedMemes() {
